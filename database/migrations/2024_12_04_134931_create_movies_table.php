@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('movies', function (Blueprint $table) {
+            $table->id();
+            $table->enum('type', ['movie', 'series']);
+            $table->float("imdb");
+            $table->bigInteger('likes')->default(0);
+            $table->bigInteger('dislikes')->default(0);
+            $table->string('thumbnail');
+            $table->string('title');
+            $table->string('creation_year');
+            $table->string('age');
+            $table->string('country');
+            $table->string('time');
+            $table->string('director');
+            $table->string('story');
+            $table->string('about');
+            $table->text('trailer');
+            $table->unsignedBigInteger('collection_id')->nullable();
+            $table->foreign('collection_id')->nullable()->references('id')->on('collections');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('movies');
+    }
+};
