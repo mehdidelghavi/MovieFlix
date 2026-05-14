@@ -20,6 +20,8 @@ use App\Models\Subescriptions;
 use App\Models\Tickets;
 use App\Models\Users;
 use App\Models\WatchHistory;
+use App\Services\SeoService;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -43,6 +45,10 @@ class IndexController extends Controller
         $releasedMovies = Movies::select('title', 'slug', 'thumbnail', 'updated_at', 'created_at', 'release_date')->whereNotExists(function ($query){
             $query->select(DB::raw(1))->from('episodes')->whereColumn('episodes.movie_id', 'movies.id');
         })->where('release_date', ">=", Carbon::now())->get();
+        SeoService::set(
+            "صفحه اصلی",
+            "دانلود و تماشای رایگان فیلم و سریال"
+        );
         return view('index', compact('indexMovies', 'updatedSeries', 'suggestedMovies', 'releasedMovies'));
     }
 

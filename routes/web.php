@@ -27,10 +27,29 @@ use App\Http\Controllers\Panel\PanelController;
 use App\Http\Controllers\Panel\ResetPasswordController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\ShareVarriableMiddleware;
+use App\Models\Movies;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\DashboardMiddleware;
 use Illuminate\Http\Request;
 use UniSharp\LaravelFilemanager\Lfm;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
+
+
+//SiteMap
+Route::get('/sitemap.xml', function () {
+
+    $sitemap = Sitemap::create();
+
+    Movies::all()->each(function ($movie) use ($sitemap) {
+
+        $sitemap->add(
+            Url::create("/movies/{$movie->slug}")
+        );
+    });
+
+    return $sitemap;
+});
 
 // Dashboard Login
 Route::group([] , function (){

@@ -10,21 +10,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <meta name="keywords" content="MovieFlix Movie Theme">
     <meta name="locale" content="fa_IR">
-    <meta name="url" content="https://FlixMovie.bmdec.ir">
+    <meta name="url" content="https://movieflix.ir">
     <meta name="type" content="movie theme">
     <meta name="author" content="Admin">
     <meta name="engineer" content="Mahdi Rostami">
-    <meta name="owner" content="Admin">
-    <meta name="description" content="فلیکس مووی قالب اچ دی ام ال با اپشن های بی نظیر و کاملا بهینه">
+    <meta name="owner" content="Mehdi Delghavi">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6898f8">
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f0f">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="newsletter-route" content="{{ route('index.newsletter') }}">
     @yield("metaHeader")
     <!-- description -->
-    <title>فلیکس مووی - صفحه اصلی</title> <!-- Website Title -->
+    {!! SEO::generate() !!}
     <link rel="icon" href="{{ asset('assets/template/assest/logo/film.ico') }}"> <!-- Favicon -->
     <!-- Fontawesome -->
     <link rel="icon" href="{{ asset('assets/template/css/all.min.css') }}">
