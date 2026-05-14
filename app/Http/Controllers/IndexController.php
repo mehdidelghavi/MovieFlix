@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Shetabit\Multipay\Invoice;
 use Shetabit\Payment\Facade\Payment;
 use Shetabit\Multipay\Exceptions\InvalidPaymentException;
@@ -118,6 +119,12 @@ class IndexController extends Controller
         } else {
             $movie->satisfaction = 0;
         }
+        $moviePath = "storage/movies/" . str_replace(" ", "", $movie->title[1]) . "/"; 
+        SeoService::set(
+            $movie->title[0],
+            Str::limit($movie->about, 50),
+            asset($moviePath . 'thumbnail/' .$movie->thumbnail),
+        );
         $relatedMovies = Movies::select('id', 'title', 'slug', 'thumbnail')->whereHas('genres', function ($query) use ($movie){
             $query->whereIn('genres.id', $movie->genres->pluck('id'));
         })->where('id', '!=', $movie->id)->limit(30)->get();
@@ -220,6 +227,10 @@ class IndexController extends Controller
         }
         $indexMovies = $indexMovies->paginate(20);
         $updatedSeries = Movies::select('id', 'title', 'slug', 'type', 'director', 'imdb', 'thumbnail', 'creation_year', 'country', 'about')->whereIn("type", ['series', 'anime'])->where("updated_at", ">=", Carbon::now()->addWeek(-1))->whereHas('episodes')->get();
+        SeoService::set(
+            "جستجو",
+            "جستجو فیلم و سریال"
+        );
         return view('search', compact('indexMovies', 'updatedSeries'));
     }
 
@@ -262,16 +273,28 @@ class IndexController extends Controller
         }
         $indexMovies = $indexMovies->paginate(20);
         $updatedSeries = Movies::select('id', 'title', 'slug', 'type', 'director', 'imdb', 'thumbnail', 'creation_year', 'country', 'about')->whereIn("type", ['series', 'anime'])->where("updated_at", ">=", Carbon::now()->addWeek(-1))->whereHas('episodes')->get();
+        SeoService::set(
+            $category_value ?? $category,
+            "جستجو بر اساس دسته بندی فیلم و سریال"
+        );
         return view('category', compact('indexMovies', 'updatedSeries'));
     }
 
     public function plans(){
         $plans = Plans::orderBy('price', 'asc')->get();
+        SeoService::set(
+            "خرید اشتراک",
+            "صفحه خرید اشتراک و انتخاب تعرفه"
+        );
         return view('plans', compact('plans'));
     }
 
     public function checkout(Plans $plan){
         if (auth()->check()){
+            SeoService::set(
+                "سبد خرید",
+                "صفحه خرید اشتراک و انتخاب تعرفه"
+            );
             return view('checkout', compact('plan'));
         } else {
             return redirect()->route('panel.login');
@@ -324,6 +347,10 @@ class IndexController extends Controller
                 'message' => 'پرداخت با موفیت انجام شد',
             ]);
             event(new UserPurchase(auth()->user(), $payment, $plan));
+            SeoService::set(
+                "خرید اشتراک",
+                "صفحه خرید اشتراک و انتخاب تعرفه"
+            );
             return view('plans', compact('plans', 'plan'))->with('success', 'پرداخت با موفقیت انجام شد');
         } catch (InvalidPaymentException $exception) {
             $payment->update([
@@ -418,6 +445,12 @@ class IndexController extends Controller
         $progress = $watchHistory ? $watchHistory->progress : 0;
         $quality = $episode->qualities()->where('quality', '=', '1080')->firstOrFail();
         $season = $episode->season;
+        $moviePath = "storage/movies/" . str_replace(" ", "", $movie->title[1]) . "/"; 
+        SeoService::set(
+            $movie->title[0],
+            Str::limit($movie->about, 50),
+            asset($moviePath . 'thumbnail/' .$movie->thumbnail),
+        );
         return view('watch', compact('movie', 'quality', 'season', 'episode', 'progress'));
     }
 

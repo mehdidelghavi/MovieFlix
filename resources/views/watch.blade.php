@@ -17,11 +17,10 @@
     <meta name="author" content="Admin">
     <meta name="engineer" content="Mahdi Rostami">
     <meta name="owner" content="Admin">
-    <meta name="description" content="فلیکس مووی قالب اچ دی ام ال با اپشن های بی نظیر و کاملا بهینه">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6898f8">
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f0f">
     <!-- description -->
-    <title>دانلود سریال بازی مرکب</title> <!-- Website Title -->
+    {!! SEO::generate() !!}
     <link rel="icon" href="{{ asset('assets/template/assest/logo/film.ico') }}"> <!-- Favicon -->
 
     <!-- Fontawesome -->
